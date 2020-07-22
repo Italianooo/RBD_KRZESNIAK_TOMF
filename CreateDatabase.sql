@@ -1,0 +1,56 @@
+IF NOT EXISTS 
+   (
+     SELECT name FROM master.dbo.sysdatabases 
+     WHERE name = N'ZooDatabase'
+    )
+CREATE DATABASE ZooDatabase;
+GO
+USE ZooDatabase;
+GO
+
+CREATE TABLE Zoo (
+    Id INT NOT NULL PRIMARY KEY,
+    ZooName NCHAR(255) NOT NULL,
+    ZooAddress NCHAR(255) NOT NULL,
+	City NCHAR(255) NOT NULL
+);
+
+CREATE TABLE Animal (
+    Id INT NOT NULL PRIMARY KEY,
+    AnimalName NCHAR(255) NOT NULL,
+    Spicies NCHAR(255) NOT NULL,
+	Age INT NOT NULL,
+	CageNumber INT NOT NULL,
+	ZooId INT NOT NULL FOREIGN KEY REFERENCES Zoo(Id)
+);
+
+CREATE TABLE ZooPerson (
+    Id INT NOT NULL PRIMARY KEY,
+    FirstName NCHAR(255) NOT NULL,
+    LastName NCHAR(255) NOT NULL,
+    BirthDate DATE NOT NULL,
+	Pesel NCHAR(11) NOT NULL,
+	PhoneNumber NCHAR(9) NOT NULL,
+	HomeAddress NCHAR(255) NOT NULL,
+	PersonType NCHAR(255) NOT NULL,
+	AnimalId INT NOT NULL FOREIGN KEY REFERENCES Animal(Id)
+);
+
+
+
+CREATE TABLE Client (
+    Id INT NOT NULL PRIMARY KEY,
+    FirstName NCHAR(255) NOT NULL,
+    LastName NCHAR(255) NOT NULL,
+	BirthDate DATE NOT NULL
+);
+
+
+
+CREATE TABLE Ticket (
+    Id INT NOT NULL PRIMARY KEY,
+    TicketType NCHAR(255) NOT NULL,
+	TicketPrice FLOAT,
+	ClientId INT NOT NULL FOREIGN KEY REFERENCES Client(Id),
+	ZooId INT NOT NULL FOREIGN KEY REFERENCES Zoo(Id)
+);
